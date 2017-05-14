@@ -156,6 +156,7 @@ pub mod borrow;
 /* Core types and methods on primitives */
 
 pub mod array;
+pub mod cell;
 pub mod panicking;
 pub mod iter;
 pub mod option;

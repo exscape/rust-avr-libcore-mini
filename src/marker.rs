@@ -16,6 +16,7 @@
 
 #![stable(feature = "rust1", since = "1.0.0")]
 
+use cell::UnsafeCell;
 use cmp;
 
 /// Types that can be transferred across thread boundaries.
@@ -538,6 +539,14 @@ pub struct PhantomData<T:?Sized>;
 
 impls! { PhantomData }
 
+mod impls {
+    #[stable(feature = "rust1", since = "1.0.0")]
+    unsafe impl<'a, T: Sync + ?Sized> Send for &'a T {}
+    #[stable(feature = "rust1", since = "1.0.0")]
+    unsafe impl<'a, T: Send + ?Sized> Send for &'a mut T {}
+}
+
+
 /// Compiler-internal trait used to determine whether a type contains
 /// any `UnsafeCell` internally, but not through an indirection.
 /// This affects, for example, whether a `static` of that type is
@@ -547,6 +556,7 @@ unsafe trait Freeze {}
 
 unsafe impl Freeze for .. {}
 
+impl<T: ?Sized> !Freeze for UnsafeCell<T> {}
 unsafe impl<T: ?Sized> Freeze for PhantomData<T> {}
 unsafe impl<T: ?Sized> Freeze for *const T {}
 unsafe impl<T: ?Sized> Freeze for *mut T {}
