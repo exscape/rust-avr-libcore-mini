@@ -157,12 +157,17 @@ pub mod borrow;
 
 pub mod array;
 pub mod cell;
+pub mod char;
 pub mod panicking;
 pub mod iter;
 pub mod option;
 pub mod result;
 
 pub mod slice;
+pub mod str;
+// pub mod hash;
+pub mod fmt;
 
 // note: does not need to be public
+mod char_private;
 mod iter_private;
