@@ -147,6 +147,7 @@
 
 #![stable(feature = "rust1", since = "1.0.0")]
 
+use fmt;
 use marker::Unsize;
 
 /// The `Drop` trait is used to run some code when a value goes out of scope.
@@ -2036,6 +2037,13 @@ pub trait IndexMut<Idx: ?Sized>: Index<Idx> {
 #[stable(feature = "rust1", since = "1.0.0")]
 pub struct RangeFull;
 
+#[stable(feature = "rust1", since = "1.0.0")]
+impl fmt::Debug for RangeFull {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "..")
+    }
+}
+
 /// A (half-open) range which is bounded at both ends: { x | start <= x < end }.
 /// Use `start..end` (two dots) for its shorthand.
 ///
@@ -2064,6 +2072,13 @@ pub struct Range<Idx> {
     /// The upper bound of the range (exclusive).
     #[stable(feature = "rust1", since = "1.0.0")]
     pub end: Idx,
+}
+
+#[stable(feature = "rust1", since = "1.0.0")]
+impl<Idx: fmt::Debug> fmt::Debug for Range<Idx> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "{:?}..{:?}", self.start, self.end)
+    }
 }
 
 #[unstable(feature = "range_contains", reason = "recently added as per RFC", issue = "32311")]
@@ -2117,6 +2132,13 @@ pub struct RangeFrom<Idx> {
     /// The lower bound of the range (inclusive).
     #[stable(feature = "rust1", since = "1.0.0")]
     pub start: Idx,
+}
+
+#[stable(feature = "rust1", since = "1.0.0")]
+impl<Idx: fmt::Debug> fmt::Debug for RangeFrom<Idx> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "{:?}..", self.start)
+    }
 }
 
 #[unstable(feature = "range_contains", reason = "recently added as per RFC", issue = "32311")]
@@ -2176,6 +2198,13 @@ pub struct RangeTo<Idx> {
     /// The upper bound of the range (exclusive).
     #[stable(feature = "rust1", since = "1.0.0")]
     pub end: Idx,
+}
+
+#[stable(feature = "rust1", since = "1.0.0")]
+impl<Idx: fmt::Debug> fmt::Debug for RangeTo<Idx> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "..{:?}", self.end)
+    }
 }
 
 #[unstable(feature = "range_contains", reason = "recently added as per RFC", issue = "32311")]
@@ -2245,6 +2274,18 @@ pub enum RangeInclusive<Idx> {
     },
 }
 
+#[unstable(feature = "inclusive_range", reason = "recently added, follows RFC", issue = "28237")]
+impl<Idx: fmt::Debug> fmt::Debug for RangeInclusive<Idx> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        use self::RangeInclusive::*;
+
+        match *self {
+            Empty { ref at } => write!(fmt, "[empty range @ {:?}]", at),
+            NonEmpty { ref start, ref end } => write!(fmt, "{:?}...{:?}", start, end),
+        }
+    }
+}
+
 #[unstable(feature = "range_contains", reason = "recently added as per RFC", issue = "32311")]
 impl<Idx: PartialOrd<Idx>> RangeInclusive<Idx> {
     /// # Examples
@@ -2311,6 +2352,13 @@ pub struct RangeToInclusive<Idx> {
                reason = "recently added, follows RFC",
                issue = "28237")]
     pub end: Idx,
+}
+
+#[unstable(feature = "inclusive_range", reason = "recently added, follows RFC", issue = "28237")]
+impl<Idx: fmt::Debug> fmt::Debug for RangeToInclusive<Idx> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "...{:?}", self.end)
+    }
 }
 
 #[unstable(feature = "range_contains", reason = "recently added as per RFC", issue = "32311")]

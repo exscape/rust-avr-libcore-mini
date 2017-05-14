@@ -240,12 +240,13 @@
 
 #![stable(feature = "rust1", since = "1.0.0")]
 
+use fmt;
 use iter::{FromIterator, FusedIterator, TrustedLen};
 
 /// `Result` is a type that represents either success (`Ok`) or failure (`Err`).
 ///
 /// See the [`std::result`](index.html) module documentation for details.
-#[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug)]
 #[must_use]
 #[stable(feature = "rust1", since = "1.0.0")]
 pub enum Result<T, E> {
@@ -707,7 +708,7 @@ impl<T, E> Result<T, E> {
     }
 }
 
-impl<T, E> Result<T, E> {
+impl<T, E: fmt::Debug> Result<T, E> {
     /// Unwraps a result, yielding the content of an `Ok`.
     ///
     /// # Panics
@@ -762,7 +763,7 @@ impl<T, E> Result<T, E> {
     }
 }
 
-impl<T, E> Result<T, E> {
+impl<T: fmt::Debug, E> Result<T, E> {
     /// Unwraps a result, yielding the content of an `Err`.
     ///
     /// # Panics
@@ -854,7 +855,7 @@ impl<T: Default, E> Result<T, E> {
 // This is a separate function to reduce the code size of the methods
 #[inline(never)]
 #[cold]
-fn unwrap_failed<E>(msg: &str, error: E) -> ! {
+fn unwrap_failed<E: fmt::Debug>(msg: &str, error: E) -> ! {
     panic!("{}: {:?}", msg, error)
 }
 
@@ -925,6 +926,7 @@ impl<'a, T, E> IntoIterator for &'a mut Result<T, E> {
 /// [`Ok`]: enum.Result.html#variant.Ok
 /// [`Result`]: enum.Result.html
 /// [`Result::iter`]: enum.Result.html#method.iter
+#[derive(Debug)]
 #[stable(feature = "rust1", since = "1.0.0")]
 pub struct Iter<'a, T: 'a> { inner: Option<&'a T> }
 
@@ -968,6 +970,7 @@ impl<'a, T> Clone for Iter<'a, T> {
 /// [`Ok`]: enum.Result.html#variant.Ok
 /// [`Result`]: enum.Result.html
 /// [`Result::iter_mut`]: enum.Result.html#method.iter_mut
+#[derive(Debug)]
 #[stable(feature = "rust1", since = "1.0.0")]
 pub struct IterMut<'a, T: 'a> { inner: Option<&'a mut T> }
 
@@ -1010,6 +1013,7 @@ unsafe impl<'a, A> TrustedLen for IterMut<'a, A> {}
 /// [`Result`]: enum.Result.html
 /// [`into_iter`]: ../iter/trait.IntoIterator.html#tymethod.into_iter
 /// [`IntoIterator`]: ../iter/trait.IntoIterator.html
+#[derive(Debug)]
 #[stable(feature = "rust1", since = "1.0.0")]
 pub struct IntoIter<T> { inner: Option<T> }
 

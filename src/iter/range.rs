@@ -244,7 +244,7 @@ step_impl_signed!(i64);
 /// The resulting iterator handles overflow by stopping. The `A`
 /// parameter is the type being iterated over, while `R` is the range
 /// type (usually one of `std::ops::{Range, RangeFrom, RangeInclusive}`.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 #[unstable(feature = "step_by", reason = "recent addition",
            issue = "27741")]
 pub struct StepBy<A, R> {

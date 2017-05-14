@@ -12,6 +12,7 @@
 
 #![stable(feature = "rust1", since = "1.0.0")]
 
+use fmt;
 use intrinsics;
 use mem::size_of;
 
@@ -42,6 +43,48 @@ use mem::size_of;
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Default)]
 pub struct Wrapping<T>(#[stable(feature = "rust1", since = "1.0.0")]
                        pub T);
+
+#[stable(feature = "rust1", since = "1.0.0")]
+impl<T: fmt::Debug> fmt::Debug for Wrapping<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
+#[stable(feature = "wrapping_display", since = "1.10.0")]
+impl<T: fmt::Display> fmt::Display for Wrapping<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
+#[stable(feature = "wrapping_fmt", since = "1.11.0")]
+impl<T: fmt::Binary> fmt::Binary for Wrapping<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
+#[stable(feature = "wrapping_fmt", since = "1.11.0")]
+impl<T: fmt::Octal> fmt::Octal for Wrapping<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
+#[stable(feature = "wrapping_fmt", since = "1.11.0")]
+impl<T: fmt::LowerHex> fmt::LowerHex for Wrapping<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
+#[stable(feature = "wrapping_fmt", since = "1.11.0")]
+impl<T: fmt::UpperHex> fmt::UpperHex for Wrapping<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
 
 mod wrapping;
 
@@ -2320,7 +2363,7 @@ impl usize {
 /// assert_eq!(nan.classify(), FpCategory::Nan);
 /// assert_eq!(sub.classify(), FpCategory::Subnormal);
 /// ```
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 #[stable(feature = "rust1", since = "1.0.0")]
 pub enum FpCategory {
     /// "Not a Number", often obtained by dividing by zero.

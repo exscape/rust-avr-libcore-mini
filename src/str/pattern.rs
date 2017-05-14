@@ -739,7 +739,7 @@ unsafe impl<'a, 'b> ReverseSearcher<'a> for StrSearcher<'a, 'b> {
 }
 
 /// The internal state of the two-way substring search algorithm.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct TwoWaySearcher {
     // constants
     /// critical factorization index

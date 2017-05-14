@@ -182,6 +182,7 @@
 #![stable(feature = "rust1", since = "1.0.0")]
 
 use cmp::Ordering;
+use fmt::{self, Debug, Display};
 use marker::Unsize;
 use mem;
 use ops::{Deref, DerefMut, CoerceUnsized};
@@ -465,19 +466,19 @@ pub struct BorrowError {
     _private: (),
 }
 
-// #[stable(feature = "try_borrow", since = "1.13.0")]
-// impl Debug for BorrowError {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         f.debug_struct("BorrowError").finish()
-//     }
-// }
+#[stable(feature = "try_borrow", since = "1.13.0")]
+impl Debug for BorrowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("BorrowError").finish()
+    }
+}
 
-// #[stable(feature = "try_borrow", since = "1.13.0")]
-// impl Display for BorrowError {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         Display::fmt("already mutably borrowed", f)
-//     }
-// }
+#[stable(feature = "try_borrow", since = "1.13.0")]
+impl Display for BorrowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        Display::fmt("already mutably borrowed", f)
+    }
+}
 
 /// An error returned by [`RefCell::try_borrow_mut`](struct.RefCell.html#method.try_borrow_mut).
 #[stable(feature = "try_borrow", since = "1.13.0")]
@@ -485,19 +486,19 @@ pub struct BorrowMutError {
     _private: (),
 }
 
-// #[stable(feature = "try_borrow", since = "1.13.0")]
-// impl Debug for BorrowMutError {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         f.debug_struct("BorrowMutError").finish()
-//     }
-// }
+#[stable(feature = "try_borrow", since = "1.13.0")]
+impl Debug for BorrowMutError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("BorrowMutError").finish()
+    }
+}
 
-// #[stable(feature = "try_borrow", since = "1.13.0")]
-// impl Display for BorrowMutError {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         Display::fmt("already borrowed", f)
-//     }
-// }
+#[stable(feature = "try_borrow", since = "1.13.0")]
+impl Display for BorrowMutError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        Display::fmt("already borrowed", f)
+    }
+}
 
 // Values [1, MAX-1] represent the number of `Ref` active
 // (will not outgrow its range since `usize` is the size of the address space)
