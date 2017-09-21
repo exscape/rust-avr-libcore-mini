@@ -47,7 +47,7 @@ pub fn panic(expr_file_line: &(&'static str, &'static str, u32)) -> ! {
             #[allow(non_snake_case)]
             let PORTC : *mut u8 = 0x28 as *mut u8;
             #[cfg(debug_assertions)]
-            const DELAY : u32 = 80000;
+            const DELAY : u32 = 20000;
             #[cfg(not(debug_assertions))]
             const DELAY : u32 = 700000;
             write_volatile(DDRC, read_volatile(DDRC) | 0b11);
