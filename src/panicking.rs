@@ -39,14 +39,33 @@ use fmt;
 #[cold] #[inline(never)] // this is the slow path, always
 #[lang = "panic"]
 pub fn panic(expr_file_line: &(&'static str, &'static str, u32)) -> ! {
-    loop {}
+    use ptr::{read_volatile, write_volatile};
+    loop {
+        unsafe {
+            #[allow(non_snake_case)]
+            let DDRC : *mut u8 = 0x27 as *mut u8;
+            #[allow(non_snake_case)]
+            let PORTC : *mut u8 = 0x28 as *mut u8;
+            #[cfg(debug_assertions)]
+            const DELAY : u32 = 80000;
+            #[cfg(not(debug_assertions))]
+            const DELAY : u32 = 700000;
+            write_volatile(DDRC, read_volatile(DDRC) | 0b11);
+            for _ in 0..DELAY {
+                write_volatile(PORTC, read_volatile(PORTC) & 0xfc);
+            }
+            for _ in 0..DELAY {
+                write_volatile(PORTC, read_volatile(PORTC) | 0b11);
+            }
+        }
+    }
 }
 
 #[cold] #[inline(never)]
 #[lang = "panic_bounds_check"]
 fn panic_bounds_check(file_line: &(&'static str, u32),
                      index: usize, len: usize) -> ! {
-    loop {}
+    panic(&("...", "...", 0));
 }
 
 #[cold] #[inline(never)]

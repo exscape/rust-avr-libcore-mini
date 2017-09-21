@@ -25,9 +25,8 @@ macro_rules! panic {
         // used inside a dead function. Just `#[allow(dead_code)]` is
         // insufficient, since the user may have
         // `#[forbid(dead_code)]` and which cannot be overridden.
-        static _FILE_LINE: (&'static str, u32) = ("", 0);
-        // $crate::panicking::panic_fmt(format_args!($fmt, $($arg)*), &_FILE_LINE)
-        loop {}
+        static _MSG_FILE_LINE: (&'static str, &'static str, u32) = ("", "", 0);
+        $crate::panicking::panic(&_MSG_FILE_LINE);
     });
 }
 
